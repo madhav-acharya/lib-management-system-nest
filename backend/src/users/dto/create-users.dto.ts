@@ -1,4 +1,5 @@
-import { IsEmail, IsOptional, IsString, MinLength } from 'class-validator';
+import { IsEmail, IsEnum, IsOptional, IsString, MinLength } from 'class-validator';
+import { Role } from '../../enums/role.enums';
 
 export class CreateUserDto 
 {
@@ -12,11 +13,12 @@ export class CreateUserDto
     password: string;
 
     @IsOptional()
-    role?: string;
+    @IsEnum(Role, { message: 'Role must be ADMIN, or SUPERADMIN' })
+    role?: Role;
 
-    @IsOptional()
     @MinLength(10, { message: 'Phone number must be at least 10 characters long' })
-    phoneNumber?: string;
+    phoneNumber: string;
 
-    address?: string;
+    @IsString()
+    address: string;
 }
