@@ -14,55 +14,63 @@ datasource db {
 }
 
 enum Role {
-  USER
   ADMIN
-  STAFF
+  SUPERADMIN
+}
+
+enum TransactionStatus {
+  BORROWED
+  RETURNED
+  OVERDUE
 }
 
 model User {
-  id              Int       @id @default(autoincrement())
-  name            String
-  email           String    @unique()
-  phoneNumber     String?
-  address         String?
-  role            Role      @default(USER)
-  borrowedBooks   BorrowedBook[]
-  password        String
-  createdAt       DateTime  @default(now())
+  id          Int           @id @default(autoincrement())
+  name        String
+  email       String        @unique()
+  phoneNumber String        @unique()
+  address     String
+  role        Role          @default(ADMIN)
+  password    String
+  createdAt   DateTime      @default(now())
+  Member      Member[]
+  Book        Book[]
+  Transaction Transaction[]
+}
+
+model Member {
+  id          Int           @id @default(autoincrement())
+  userId      Int
+  user        User          @relation(fields: [userId], references: [id])
+  name        String
+  email       String        @unique()
+  phoneNumber String        @unique()
+  address     String
+  createdAt   DateTime      @default(now())
+  Transaction Transaction[]
 }
 
 model Book {
-  id            Int            @id @default(autoincrement())
-  title         String
-  author        Author         @relation(fields: [authorId], references: [id])
-  authorId      Int
-  category      Category?      @relation(fields: [categoryId], references: [id])
-  categoryId    Int?
-  totalCopies   Int
-  available     Int
-  borrowedBooks BorrowedBook[]
-  createdAt     DateTime       @default(now())
+  id          Int           @id @default(autoincrement())
+  userId      Int
+  user        User          @relation(fields: [userId], references: [id])
+  author      String
+  title       String
+  totalCopies Int
+  available   Int
+  createdAt   DateTime      @default(now())
+  Transaction Transaction[]
 }
 
-model Author {
-  id    Int    @id @default(autoincrement())
-  name  String
-  books Book[]
-}
-
-model Category {
-  id    Int    @id @default(autoincrement())
-  name  String @unique
-  books Book[]
-}
-
-model BorrowedBook {
-  id         Int      @id @default(autoincrement())
-  user       User     @relation(fields: [userId], references: [id])
-  userId     Int
-  book       Book     @relation(fields: [bookId], references: [id])
+model Transaction {
+  id         Int               @id @default(autoincrement())
   bookId     Int
-  borrowDate DateTime @default(now())
+  book       Book              @relation(fields: [bookId], references: [id])
+  memberId   Int
+  member     Member            @relation(fields: [memberId], references: [id])
+  userId     Int
+  user       User              @relation(fields: [userId], references: [id])
+  status     TransactionStatus @default(BORROWED)
   returnDate DateTime?
-  returned   Boolean  @default(false)
+  createdAt  DateTime          @default(now())
 }
