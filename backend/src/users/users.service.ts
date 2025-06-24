@@ -16,7 +16,7 @@ export class UsersService {
                     name: data.name,
                     email: data.email,
                     password: hashedPassword,
-                    role: 'USER',
+                    role: data.role,
                     phoneNumber: data.phoneNumber,
                     address: data.address,
                 },
@@ -47,7 +47,8 @@ export class UsersService {
 
     async findAllUsers()
     {
-        return this.prismaService.user.findMany({
+        try {
+            const users = await this.prismaService.user.findMany({
             select: {
                 id: true,
                 name: true,
@@ -57,5 +58,42 @@ export class UsersService {
                 address: true,
             },
         });
+        return {
+            success: true,
+            message: 'Users retrieved successfully',
+            statusCode: 200,
+            data: users,
+        };
+        } catch (error) {
+            return {
+                success: false,
+                message: 'Error retrieving users',
+                statusCode: 500,
+                error: error.message,
+            };
+            
+        }
+        
+    }
+
+    async deleteUserById(userId: number) {
+        try {
+            const user = await this.prismaService.user.delete({
+                where: { id: userId },
+            });
+            return {
+                success: true,
+                message: 'User deleted successfully',
+                statusCode: 200,
+                data: user,
+            };
+        } catch (error) {
+            return {
+                success: false,
+                message: 'Error deleting user',
+                statusCode: 500,
+                error: error.message,
+            };
+        }
     }
 }
