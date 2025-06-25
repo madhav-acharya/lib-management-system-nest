@@ -96,4 +96,34 @@ export class UsersService {
             };
         }
     }
+
+    async findUserByEmail(email: string) {
+        try {
+            const user = await this.prismaService.user.findUnique({
+                where: { email },
+                select: {
+                    id: true,
+                    name: true,
+                    email: true,
+                    role: true,
+                    phoneNumber: true,
+                    address: true,
+                    password: true,
+                },
+            });
+            return {
+                success: true,
+                message: 'User found successfully',
+                statusCode: 200,
+                data: user,
+            };
+        } catch (error) {
+            return {
+                success: false,
+                message: 'Error finding user',
+                statusCode: 500,
+                error: error.message,
+            };
+        }
+    }
 }
