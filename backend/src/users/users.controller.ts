@@ -16,6 +16,11 @@ export class UsersController {
         return this.usersService.findAllUsers();
     }
 
+    @Get('get/:email')
+    async findUserByEmail(@Param('email') email: string) {
+        return this.usersService.findUserByEmail(email);
+    }
+
     @Delete('delete/:id')
     async deleteUser(@Param('id') id: string) {
         return this.usersService.deleteUserById(parseInt(id));
