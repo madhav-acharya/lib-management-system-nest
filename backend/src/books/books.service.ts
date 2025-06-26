@@ -7,14 +7,14 @@ export class BooksService {
 
     constructor(private prismaService: PrismaService) {}
 
-    async addBook(data: AddBookDto)
+    async addBook(data: AddBookDto, userId: number)
     {
         try {
             const book = await this.prismaService.book.create({
             data: {
                 title: data.title,
                 author: data.author,
-                userId: data.userId,
+                userId: userId,
                 totalCopies: data.totalCopies,
                 available: data.available
             },
@@ -45,9 +45,12 @@ export class BooksService {
         
     }
 
-    async getAllBooks() {
+    async getAllBooks(userId: number) {
         try {
         const books = await this.prismaService.book.findMany({
+            where: {
+                userId: userId,
+            },
             include: {
                 user: true,
             },
