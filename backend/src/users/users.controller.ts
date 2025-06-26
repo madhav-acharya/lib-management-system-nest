@@ -6,12 +6,13 @@ import { RolesGuard } from "src/auth/roles.guard";
 import { Roles } from "src/auth/roles.decorator";
 import { Role } from "src/enums/role.enums";
 
+@UseGuards(JwtAuthGuard)
 @Controller('users')
 export class UsersController {
     constructor( private readonly usersService: UsersService) {}
 
     @Post('create')
-    @UseGuards(JwtAuthGuard, RolesGuard)
+    @UseGuards(RolesGuard)
     @Roles(Role.SUPERADMIN)
     async createUser(@Body() createUserDto: CreateUserDto) {
         return this.usersService.createUser(createUserDto);
