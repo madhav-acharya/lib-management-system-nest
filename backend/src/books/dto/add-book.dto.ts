@@ -9,9 +9,6 @@ export class AddBookDto
     author: string;
 
     @IsNumber()
-    userId: number;
-
-    @IsNumber()
     totalCopies: number;
 
     @IsNumber()
