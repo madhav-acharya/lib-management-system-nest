@@ -6,7 +6,7 @@ import { AddMemberDto } from './dto/add-member.dto';
 export class MembersService {
     constructor(private readonly prismaService: PrismaService) {}
 
-    async createMember(memberData: AddMemberDto) {
+    async createMember(memberData: AddMemberDto, userId: number) {
         try {
             const member = await this.prismaService.member.create({
                 data: {
@@ -14,7 +14,7 @@ export class MembersService {
                     email: memberData.email,
                     phoneNumber: memberData.phoneNumber,
                     address: memberData.address,
-                    userId: memberData.userId,
+                    userId: userId,
                 },
                 select: {
                     id: true,
@@ -35,14 +35,17 @@ export class MembersService {
                 success: false,
                 message: 'Error creating member',
                 statusCode: 500,
-                error: error.message,
             };
         }
     }
 
-    async getMembers() {
+    async getMembers(userId: number) {
         try {
-            const members = await this.prismaService.member.findMany();
+            const members = await this.prismaService.member.findMany({
+                where: {
+                    userId: userId
+                }
+            });
             return {
                 success: true,
                 message: 'Members retrieved successfully',
@@ -54,7 +57,6 @@ export class MembersService {
                 success: false,
                 message: 'Error retrieving members',
                 statusCode: 500,
-                error: error.message,
             };
             
         }
