@@ -12,7 +12,4 @@ export class AddMemberDto {
     
     @IsString()
     address: string;
-
-    @IsNumber()
-    userId: number;
 }
