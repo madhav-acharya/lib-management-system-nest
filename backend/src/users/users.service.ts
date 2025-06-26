@@ -40,7 +40,6 @@ export class UsersService {
                 success: false,
                 message: 'Error creating user',
                 statusCode: 500,
-                error: error.message,
             }; 
         }
     }
@@ -69,7 +68,6 @@ export class UsersService {
                 success: false,
                 message: 'Error retrieving users',
                 statusCode: 500,
-                error: error.message,
             };
             
         }
@@ -92,7 +90,6 @@ export class UsersService {
                 success: false,
                 message: 'Error deleting user',
                 statusCode: 500,
-                error: error.message,
             };
         }
     }
@@ -122,7 +119,6 @@ export class UsersService {
                 success: false,
                 message: 'Error finding user',
                 statusCode: 500,
-                error: error.message,
             };
         }
     }
