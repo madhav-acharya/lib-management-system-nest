@@ -8,9 +8,6 @@ export class GenerateTransactionDto {
     @IsNumber()
     memberId: number;
 
-    @IsNumber()
-    userId: number;
-
     @IsEnum(TransactionStatus)
     @IsOptional()
     status?: TransactionStatus;
