@@ -8,6 +8,39 @@ export class TransactionsService {
 
     async createTransaction(transactionData: GenerateTransactionDto, userId: number) {
         try {
+            const transactionCount = await this.prismaService.transaction.count({
+                where: {
+                    userId: userId,
+                    memberId: transactionData.memberId,
+                    status: {
+                        not: 'RETURNED',
+                    }
+                },
+            });
+
+            if (transactionCount > 6) {
+                return {
+                    success: false,
+                    message: 'Book borrowing limit exceeded for this member',
+                    statusCode: 400,
+                };
+            }
+            const book = await this.prismaService.book.findUnique({
+                where: {
+                    id: transactionData.bookId,
+                },
+                select: {
+                    id: true,
+                    available: true,
+                }
+            });
+            if (!book || book.available <= 0) {
+                return {
+                    success: false,
+                    message: 'Book not found or no stock available',
+                    statusCode: 404,
+                };
+            }
             const transaction = await this.prismaService.transaction.create({
                 data: {
                     bookId: transactionData.bookId,
@@ -36,9 +69,12 @@ export class TransactionsService {
         }
     }
 
-    async getTransactions() {
+    async getTransactions(userId: number) {
         try {
             const transactions = await this.prismaService.transaction.findMany({
+                where: {
+                    userId: userId
+                },
                 include: {
                     book: true,
                     member: true,
