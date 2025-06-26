@@ -6,13 +6,13 @@ import { GenerateTransactionDto } from './dto/generate-transaction.dto';
 export class TransactionsService {
     constructor(private readonly prismaService: PrismaService) {}
 
-    async createTransaction(transactionData: GenerateTransactionDto) {
+    async createTransaction(transactionData: GenerateTransactionDto, userId: number) {
         try {
             const transaction = await this.prismaService.transaction.create({
                 data: {
                     bookId: transactionData.bookId,
                     memberId: transactionData.memberId,
-                    userId: transactionData.userId,
+                    userId: userId,
                 },
                 select: {
                     id: true,
@@ -32,7 +32,6 @@ export class TransactionsService {
                 success: false,
                 message: 'Error creating transaction',
                 statusCode: 500,
-                error: error.message,
             };
         }
     }
@@ -57,7 +56,6 @@ export class TransactionsService {
                 success: false,
                 message: 'Error retrieving transactions',
                 statusCode: 500,
-                error: error.message,
             };
         }
     }
