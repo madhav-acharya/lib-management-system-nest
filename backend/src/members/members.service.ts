@@ -44,7 +44,10 @@ export class MembersService {
             const members = await this.prismaService.member.findMany({
                 where: {
                     userId: userId
-                }
+                },
+                include: {
+                    user: true,
+                },
             });
             return {
                 success: true,
