@@ -75,7 +75,7 @@ A comprehensive library management system backend built with NestJS, Prisma ORM,
 ### Clone Repository
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/madhav-acharya/lib-management-system-nest.git
 cd lib-management-system/backend
 ```
 
