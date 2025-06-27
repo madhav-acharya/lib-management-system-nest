@@ -65,4 +65,52 @@ export class MembersService {
         }
         
     }
+
+    async deleteMemberById(id: number) {
+        try {
+            const memberExists = await this.prismaService.member.findUnique({
+                where: {
+                    id: id,
+                },
+            });
+            if (!memberExists) {
+                return {
+                    success: false,
+                    message: 'Member not found',
+                    statusCode: 404,
+                };
+            }
+
+            const transactions = await this.prismaService.transaction.findMany({
+                where: {
+                    memberId: id,
+                },
+            });
+            if (transactions) {
+                await this.prismaService.transaction.deleteMany({
+                    where: {
+                        memberId: id,
+                    },
+                });
+            }
+            const member = await this.prismaService.member.delete({
+                where: {
+                    id: id,
+                },
+            });
+            return {
+                success: true,
+                message: `Member with ID ${id} linked with ${transactions.length} transactions deleted successfully`,
+                statusCode: 200,
+                data: member,
+            };
+        } catch (error) {
+            return {
+                success: false,
+                message: 'Error deleting member',
+                statusCode: 500,
+                error: error.message,
+            };
+        }
+    }
 }
