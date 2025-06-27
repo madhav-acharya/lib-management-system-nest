@@ -11,7 +11,7 @@ import { Role } from "src/enums/role.enums";
 export class UsersController {
     constructor( private readonly usersService: UsersService) {}
 
-    @Post('create')
+    @Post('add')
     @UseGuards(RolesGuard)
     @Roles(Role.SUPERADMIN)
     async createUser(@Body() createUserDto: CreateUserDto) {
