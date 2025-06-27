@@ -43,8 +43,8 @@ model Member {
   userId      Int
   user        User          @relation(fields: [userId], references: [id])
   name        String
-  email       String        @unique()
-  phoneNumber String        @unique()
+  email       String
+  phoneNumber String
   address     String
   createdAt   DateTime      @default(now())
   Transaction Transaction[]
