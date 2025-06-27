@@ -10,13 +10,13 @@ import { UpdateTransactionDto } from './dto/update-status.dto';
 export class TransactionsController {
     constructor(private transactionService: TransactionsService) {}
     
-    @Get()
+    @Get('get')
     async getTransactions(@Req() req: ReqUser) {
         const userId = req.user.id;
         return this.transactionService.getTransactions(userId);
     }
 
-    @Post()
+    @Post('generate')
     async createTransaction(@Body() transactionData: GenerateTransactionDto, @Req() req: ReqUser) {
         const userId = req.user.id;
         return this.transactionService.createTransaction(transactionData, userId);
