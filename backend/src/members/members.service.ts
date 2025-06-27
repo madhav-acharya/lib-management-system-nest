@@ -8,6 +8,19 @@ export class MembersService {
 
     async createMember(memberData: AddMemberDto, userId: number) {
         try {
+            const memberExists = await this.prismaService.member.findFirst({
+                where: {
+                    email: memberData.email,
+                    userId: userId,
+                },
+            });
+            if (memberExists) {
+                return {
+                    success: false,
+                    message: 'Member with this email already exists in this library',
+                    statusCode: 400,
+                };
+            }
             const member = await this.prismaService.member.create({
                 data: {
                     name: memberData.name,
@@ -109,7 +122,6 @@ export class MembersService {
                 success: false,
                 message: 'Error deleting member',
                 statusCode: 500,
-                error: error.message,
             };
         }
     }
