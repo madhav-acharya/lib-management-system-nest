@@ -1,98 +1,502 @@
+# Library Management System Backend
+
 <p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
+  <img src="https://nestjs.com/img/logo-small.svg" width="80" alt="NestJS" />
+  <img src="https://www.vectorlogo.zone/logos/prismaio/prismaio-icon.svg" width="50" alt="Prisma" />
+  <img src="https://www.vectorlogo.zone/logos/postgresql/postgresql-icon.svg" width="60" alt="PostgreSQL" />
+  <img src="https://www.vectorlogo.zone/logos/docker/docker-icon.svg" width="60" alt="Docker" />
 </p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
+<p align="center">
+  <a href="https://nestjs.com/" target="_blank">
+    <img src="https://img.shields.io/badge/NestJS-Backend-red.svg?logo=nestjs" alt="NestJS" />
+  </a>
+  <a href="https://www.prisma.io/" target="_blank">
+    <img src="https://img.shields.io/badge/Prisma-ORM-blue.svg?logo=prisma" alt="Prisma" />
+  </a>
+  <a href="https://www.postgresql.org/" target="_blank">
+    <img src="https://img.shields.io/badge/PostgreSQL-Database-316192.svg?logo=postgresql" alt="PostgreSQL" />
+  </a>
+  <a href="https://jwt.io/" target="_blank">
+    <img src="https://img.shields.io/badge/JWT-Authentication-black.svg?logo=jsonwebtokens" alt="JWT" />
+  </a>
 </p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-## Description
+A comprehensive library management system backend built with NestJS, Prisma ORM, and PostgreSQL. This system provides complete functionality for managing users, library members, books, and transaction operations with role-based authentication and automated overdue tracking.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Table of Contents
 
-## Project setup
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Installation](#installation)
+- [Environment Setup](#environment-setup)
+- [Database Setup](#database-setup)
+- [Running the Application](#running-the-application)
+- [API Endpoints](#api-endpoints)
+- [Authentication](#authentication)
+- [Database Schema](#database-schema)
+- [Testing](#testing)
+- [Docker Setup](#docker-setup)
+- [Project Structure](#project-structure)
+
+## Features
+
+- JWT-based Authentication and Authorization
+- Role-based Access Control (ADMIN, SUPERADMIN)
+- User Management
+- Library Member Management
+- Book Inventory Management
+- Transaction Management (Borrow/Return/Overdue)
+- Automated Overdue Status Updates with Cron Jobs
+- Input Validation and Error Handling
+- PostgreSQL Database with Prisma ORM
+- RESTful API Design
+
+## Tech Stack
+
+- **Framework**: NestJS
+- **Database**: PostgreSQL
+- **ORM**: Prisma
+- **Authentication**: JWT (JSON Web Tokens)
+- **Validation**: class-validator
+- **Password Hashing**: bcrypt
+- **Scheduling**: @nestjs/schedule
+- **Language**: TypeScript
+
+## Installation
+
+### Prerequisites
+
+- Node.js (v16 or higher)
+- npm or yarn
+- PostgreSQL database
+- Docker (optional)
+
+### Clone Repository
 
 ```bash
-$ npm install
+git clone <repository-url>
+cd lib-management-system/backend
 ```
 
-## Compile and run the project
+### Install Dependencies
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+npm install
 ```
 
-## Run tests
+## Environment Setup
+
+Create a `.env` file in the backend directory:
 
 ```bash
-# unit tests
-$ npm run test
+# Database
+DATABASE_URL="postgresql://username:password@localhost:5432/library_db"
 
-# e2e tests
-$ npm run test:e2e
+# Server
+PORT=3000
 
-# test coverage
-$ npm run test:cov
+# JWT
+JWT_SECRET="your-super-secret-jwt-key-here"
 ```
 
-## Deployment
+## Database Setup
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+### Generate Prisma Client
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+npm run generate
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+### Run Database Migrations
 
-## Resources
+```bash
+npx prisma migrate deploy
+```
 
-Check out a few resources that may come in handy when working with NestJS:
+### View Database (Optional)
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+```bash
+npx prisma studio
+```
 
-## Support
+## Running the Application
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+### Development Mode
 
-## Stay in touch
+```bash
+npm run start:dev
+```
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+### Production Mode
+
+```bash
+npm run build
+npm run start:prod
+```
+
+The server will start on `http://localhost:3000`
+
+## API Endpoints
+
+### Authentication
+
+| Method | Endpoint | Description | Access |
+|--------|----------|-------------|---------|
+| POST | `/auth/login` | User login | Public |
+
+**Login Request Body:**
+```json
+{
+  "email": "user@example.com",
+  "password": "password123"
+}
+```
+
+### Users Management
+
+| Method | Endpoint | Description | Access |
+|--------|----------|-------------|---------|
+| POST | `/users/add` | Create new user | SUPERADMIN |
+| GET | `/users/getAll` | Get all users | Authenticated |
+| GET | `/users/get/:email` | Get user by email | Authenticated |
+| DELETE | `/users/delete/:id` | Delete user | Authenticated |
+
+**Create User Request Body:**
+```json
+{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "password": "password123",
+  "role": "ADMIN",
+  "phoneNumber": "1234567890",
+  "address": "123 Main St"
+}
+```
+
+### Books Management
+
+| Method | Endpoint | Description | Access |
+|--------|----------|-------------|---------|
+| POST | `/books/add` | Add new book | Authenticated |
+| GET | `/books/getAll` | Get all books | Authenticated |
+
+**Add Book Request Body:**
+```json
+{
+  "title": "The Great Gatsby",
+  "author": "F. Scott Fitzgerald",
+  "totalCopies": 10,
+  "available": 10
+}
+```
+
+### Members Management
+
+| Method | Endpoint | Description | Access |
+|--------|----------|-------------|---------|
+| POST | `/members/add` | Add new member | Authenticated |
+| GET | `/members/getAll` | Get all members | Authenticated |
+| DELETE | `/members/delete/:id` | Delete member | Authenticated |
+
+**Add Member Request Body:**
+```json
+{
+  "name": "Jane Smith",
+  "email": "jane@example.com",
+  "phoneNumber": "0987654321",
+  "address": "456 Oak Ave"
+}
+```
+
+### Transactions Management
+
+| Method | Endpoint | Description | Access |
+|--------|----------|-------------|---------|
+| POST | `/transactions/generate` | Create new transaction | Authenticated |
+| GET | `/transactions/get` | Get all transactions | Authenticated |
+| PATCH | `/transactions/update/:id` | Update transaction status | Authenticated |
+
+**Create Transaction Request Body:**
+```json
+{
+  "bookId": 1,
+  "memberId": 1,
+  "status": "BORROWED",
+  "returnDate": "2025-07-15T00:00:00.000Z"
+}
+```
+
+**Update Transaction Status Request Body:**
+```json
+{
+  "status": "RETURNED"
+}
+```
+
+## Authentication
+
+### JWT Token
+
+All protected endpoints require a JWT token in the Authorization header:
+
+```bash
+Authorization: Bearer <your-jwt-token>
+```
+
+### Role-Based Access
+
+- **ADMIN**: Can manage books, members, and transactions
+- **SUPERADMIN**: Can manage users + all ADMIN permissions
+
+## Database Schema
+
+### User Model
+```prisma
+model User {
+  id          Int           @id @default(autoincrement())
+  name        String
+  email       String        @unique()
+  phoneNumber String        @unique()
+  address     String
+  role        Role          @default(ADMIN)
+  password    String
+  createdAt   DateTime      @default(now())
+  Member      Member[]
+  Book        Book[]
+  Transaction Transaction[]
+}
+```
+
+### Member Model
+```prisma
+model Member {
+  id          Int           @id @default(autoincrement())
+  userId      Int
+  user        User          @relation(fields: [userId], references: [id])
+  name        String
+  email       String
+  phoneNumber String
+  address     String
+  createdAt   DateTime      @default(now())
+  Transaction Transaction[]
+}
+```
+
+### Book Model
+```prisma
+model Book {
+  id          Int           @id @default(autoincrement())
+  userId      Int
+  user        User          @relation(fields: [userId], references: [id])
+  author      String
+  title       String
+  totalCopies Int
+  available   Int
+  createdAt   DateTime      @default(now())
+  Transaction Transaction[]
+}
+```
+
+### Transaction Model
+```prisma
+model Transaction {
+  id         Int               @id @default(autoincrement())
+  bookId     Int
+  book       Book              @relation(fields: [bookId], references: [id])
+  memberId   Int
+  member     Member            @relation(fields: [memberId], references: [id])
+  userId     Int
+  user       User              @relation(fields: [userId], references: [id])
+  status     TransactionStatus @default(BORROWED)
+  returnDate DateTime?
+  createdAt  DateTime          @default(now())
+}
+```
+
+## Testing
+
+### Unit Tests
+```bash
+npm run test
+```
+
+### End-to-End Tests
+```bash
+npm run test:e2e
+```
+
+### Test Coverage
+```bash
+npm run test:cov
+```
+
+### Manual Testing with cURL
+
+#### Login
+```bash
+curl -X POST http://localhost:3000/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "admin@example.com",
+    "password": "password123"
+  }'
+```
+
+#### Add Book (with token)
+```bash
+curl -X POST http://localhost:3000/books/add \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
+  -d '{
+    "title": "1984",
+    "author": "George Orwell",
+    "totalCopies": 5,
+    "available": 5
+  }'
+```
+
+#### Create Transaction
+```bash
+curl -X POST http://localhost:3000/transactions/generate \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
+  -d '{
+    "bookId": 1,
+    "memberId": 1,
+    "returnDate": "2025-07-15T00:00:00.000Z"
+  }'
+```
+
+## Docker Setup
+
+### Docker Compose
+
+Create `docker-compose.yml`:
+
+```yaml
+version: '3.8'
+services:
+  postgres:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_USER: library_user
+      POSTGRES_PASSWORD: library_pass
+      POSTGRES_DB: library_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: postgresql://library_user:library_pass@postgres:5432/library_db
+      JWT_SECRET: your-super-secret-jwt-key
+    depends_on:
+      - postgres
+    volumes:
+      - .:/app
+      - /app/node_modules
+
+volumes:
+  postgres_data:
+```
+
+### Dockerfile
+
+```dockerfile
+FROM node:18-alpine
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm install
+
+COPY . .
+RUN npm run build
+
+EXPOSE 3000
+
+CMD ["npm", "run", "start:prod"]
+```
+
+### Run with Docker
+
+```bash
+docker-compose up --build
+```
+
+## Project Structure
+
+```
+backend/
+├── prisma/
+│   ├── migrations/          # Database migrations
+│   ├── schema.prisma       # Database schema
+│   ├── prisma.module.ts    # Prisma module
+│   └── prisma.service.ts   # Prisma service
+├── src/
+│   ├── auth/               # Authentication module
+│   │   ├── dto/
+│   │   ├── auth.controller.ts
+│   │   ├── auth.service.ts
+│   │   ├── auth.module.ts
+│   │   ├── jwt-auth.guard.ts
+│   │   ├── jwt.strategy.ts
+│   │   ├── roles.decorator.ts
+│   │   └── roles.guard.ts
+│   ├── books/              # Books module
+│   │   ├── dto/
+│   │   ├── books.controller.ts
+│   │   ├── books.service.ts
+│   │   └── books.module.ts
+│   ├── members/            # Members module
+│   │   ├── dto/
+│   │   ├── members.controller.ts
+│   │   ├── members.service.ts
+│   │   └── members.module.ts
+│   ├── transactions/       # Transactions module
+│   │   ├── dto/
+│   │   ├── transactions.controller.ts
+│   │   ├── transactions.service.ts
+│   │   └── transactions.module.ts
+│   ├── users/              # Users module
+│   │   ├── dto/
+│   │   ├── users.controller.ts
+│   │   ├── users.service.ts
+│   │   └── users.module.ts
+│   ├── enums/              # Enum definitions
+│   ├── interfaces/         # TypeScript interfaces
+│   ├── app.controller.ts
+│   ├── app.service.ts
+│   ├── app.module.ts
+│   └── main.ts
+├── test/                   # Test files
+├── package.json
+├── tsconfig.json
+└── README.md
+```
+
+## Business Rules
+
+1. **Transaction Limits**: Members can have maximum 6 active (non-returned) transactions
+2. **Book Availability**: Books can only be borrowed if available copies > 0
+3. **Overdue Management**: Automated daily cron job updates overdue transactions
+4. **Role Permissions**: Only SUPERADMIN can create users
+5. **User Association**: All entities (books, members, transactions) are associated with users
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a Pull Request
 
 ## License
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+This project is licensed under the MIT License.
