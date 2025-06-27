@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
 import { GenerateTransactionDto } from './dto/generate-transaction.dto';
+import { TransactionStatus } from 'src/enums/transaction-status.enums';
+import { Cron } from '@nestjs/schedule';
 
 @Injectable()
 export class TransactionsService {
@@ -13,7 +15,7 @@ export class TransactionsService {
                     userId: userId,
                     memberId: transactionData.memberId,
                     status: {
-                        not: 'RETURNED',
+                        not: TransactionStatus.RETURNED,
                     }
                 },
             });
@@ -69,6 +71,92 @@ export class TransactionsService {
         }
     }
 
+    async updateTransactionStatus(status: TransactionStatus, transactionId: number)
+    {
+        try {
+           
+            const transaction =  await this.prismaService.transaction.findUnique({
+                where: {
+                    id: transactionId,
+                },
+                select: {
+                    id: true,
+                    status: true,
+                    returnDate: true,
+                },
+            })
+
+            if (!transaction) {
+                return {
+                    success: false,
+                    message: 'Transaction not found',
+                    statusCode: 404,
+                };
+            }
+            if (transaction.status === 'RETURNED') {
+                return {
+                    success: false,
+                    message: 'Book already returned',
+                    statusCode: 400,
+                };
+            }
+
+            await this.prismaService.transaction.update({
+                where: {
+                    id: transactionId,
+                },
+                data: {
+                    status: status,
+                    ...(status === TransactionStatus.RETURNED && { returnDate: new Date() }),
+                }
+            });
+
+            return {
+                success: true,
+                message: "Book status updated sucessfully",
+                statusCode: 200
+            }
+        } catch (error) {
+            return {
+                success: false,
+                message: 'Error updating transaction status',
+                statusCode: 500,
+            };
+            
+        }
+    }
+
+
+    @Cron('0 0 * * *')
+    async autoChangeOverdueStatus()
+    {
+        try {
+            const fiveDaysAgo = new Date();
+            fiveDaysAgo.setDate(fiveDaysAgo.getDate() - 5);
+
+            await this.prismaService.transaction.updateMany({
+                where: {
+                    status: TransactionStatus.BORROWED,
+                    createdAt: {
+                        lte: fiveDaysAgo,
+                    }
+                },
+                data: {
+                    status: TransactionStatus.OVERDUE,
+                }
+            })
+
+            return {
+                success: true,
+                message: 'Transactions updated successfully',
+                statusCode: 200,
+            };
+
+        } catch (error) {
+            
+        }
+    }
+
     async getTransactions(userId: number) {
         try {
             const transactions = await this.prismaService.transaction.findMany({
@@ -78,7 +166,16 @@ export class TransactionsService {
                 include: {
                     book: true,
                     member: true,
-                    user: true,
+                    user: {
+                        select: {
+                            id: true,
+                            name: true,
+                            email: true,
+                            role: true,
+                            phoneNumber: true,
+                            address: true,
+                        },
+                    },
                 },
             });
             return {
