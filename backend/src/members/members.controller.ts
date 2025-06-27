@@ -9,13 +9,13 @@ import { ReqUser } from 'src/interfaces/req-user.interface';
 export class MembersController {
     constructor(private readonly membersService: MembersService) {}
 
-    @Post()
+    @Post('add')
     async createMember(@Body() addMemberDto: AddMemberDto, @Req() req: ReqUser) {
         const userId = req.user.id;
         return this.membersService.createMember(addMemberDto, userId);
     }
 
-    @Get()
+    @Get('getAll')
     async getMembers(@Req() req: ReqUser) {
         const userId = req.user.id;
         return this.membersService.getMembers(userId);
