@@ -9,13 +9,13 @@ import { ReqUser } from 'src/interfaces/req-user.interface';
 export class BooksController {
     constructor(private bookService: BooksService) {}
 
-    @Post()
+    @Post('add')
     async createBook(@Body() addBookDto: AddBookDto, @Req() req: ReqUser) {
         const userId = req.user.id;
         return await this.bookService.addBook(addBookDto, userId);
     }
 
-    @Get()
+    @Get('getAll')
     async getAllBooks(@Req() req: ReqUser) {
         const userId = req.user.id;
         return await this.bookService.getAllBooks(userId);
